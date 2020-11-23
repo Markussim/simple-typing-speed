@@ -10,6 +10,8 @@
       href="data:image/gif;base64,R0lGODlhEAAQAIAAAAAAAAAAACH5BAkAAAEALAAAAAAQABAAAAIgjI+py+0PEQiT1lkNpppnz4HfdoEH2W1nCJRfBMfyfBQAOw=="
     />
     <script>
+      let t;
+
       const promiseA = new Promise(async (resolve, reject) => {
         let words;
 
@@ -22,26 +24,48 @@
         reject("Failed");
       });
       window.onload = function () {
-        console.log();
-        if (promiseA.Promise) {
-          document.getElementById("word").innerHTML = "pending";
-        }
+        t = new Date();
         changeWord();
       };
 
       async function changeWord() {
         let words = await promiseA;
+
+        let wordString = "";
+
+        for (let i = 0; i < 5; i++) {
+          wordString += words[getRandomInt(words.length - 1)] + " "
+        }
+
         document.getElementById("word").innerHTML =
-          words[getRandomInt(words.length - 1)];
+          wordString;
       }
 
       function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
+      }
+
+      function tryWord(doc) {
+        let tmp = new Date();
+        if (doc.value == document.getElementById("word").innerHTML) {
+          //console.log(doc.value.length / (tmp.getTime() - t.getTime()));
+          let wordsUnit = doc.value.length / 5;
+
+          let secondsUnit = (tmp.getTime() - t.getTime()) / 1000
+
+          let minutesUnit = secondsUnit / 60
+
+          console.log(wordsUnit / minutesUnit);
+          changeWord();
+          doc.value = "";
+          t = new Date();
+        }
       }
     </script>
   </head>
   <body>
     <p id="word"></p>
     <button onclick="changeWord()">Change word</button>
+    <input oninput="tryWord(this)" type="text" />
   </body>
 </html>
