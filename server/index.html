@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="icon"
+      type="image/gif"
+      href="data:image/gif;base64,R0lGODlhEAAQAIAAAAAAAAAAACH5BAkAAAEALAAAAAAQABAAAAIgjI+py+0PEQiT1lkNpppnz4HfdoEH2W1nCJRfBMfyfBQAOw=="
+    />
+    <script>
+      const promiseA = new Promise(async (resolve, reject) => {
+        let words;
+
+        let wordsPromise = await fetch("/words");
+        if (wordsPromise.ok) {
+          let wordsString = await wordsPromise.text();
+          words = wordsString.split("\n");
+          resolve(words);
+        }
+        reject("Failed");
+      });
+      window.onload = function () {
+        console.log();
+        if (promiseA.Promise) {
+          document.getElementById("word").innerHTML = "pending";
+        }
+        changeWord();
+      };
+
+      async function changeWord() {
+        let words = await promiseA;
+        document.getElementById("word").innerHTML =
+          words[getRandomInt(words.length - 1)];
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
+    </script>
+  </head>
+  <body>
+    <p id="word"></p>
+    <button onclick="changeWord()">Change word</button>
+  </body>
+</html>

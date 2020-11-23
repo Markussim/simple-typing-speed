@@ -1,0 +1,27 @@
+{
+  "name": "simple-typing-speed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./server/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Markussim/simple-typing-speed.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Markussim/simple-typing-speed/issues"
+  },
+  "homepage": "https://github.com/Markussim/simple-typing-speed#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "word-list": "^3.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
