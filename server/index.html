@@ -23,7 +23,7 @@
         }
         reject("Failed");
       });
-      window.onload = function () {
+      window.onload = async function () {
         t = new Date();
         changeWord();
       };
@@ -34,26 +34,31 @@
         let wordString = "";
 
         for (let i = 0; i < 5; i++) {
-          wordString += words[getRandomInt(words.length - 1)] + " "
+          while (true) {
+            let wordTest = words[getRandomInt(words.length - 1)];
+            if (wordTest.length < 6) {
+              wordString += wordTest + " ";
+              break;
+            }
+          }
         }
 
-        document.getElementById("word").innerHTML =
-          wordString;
+        document.getElementById("word").innerHTML = wordString;
       }
 
       function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
       }
 
-      function tryWord(doc) {
+      async function tryWord(doc) {
         let tmp = new Date();
-        if (doc.value == document.getElementById("word").innerHTML) {
+        if (doc.value + " " == document.getElementById("word").innerHTML) {
           //console.log(doc.value.length / (tmp.getTime() - t.getTime()));
           let wordsUnit = doc.value.length / 5;
 
-          let secondsUnit = (tmp.getTime() - t.getTime()) / 1000
+          let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
 
-          let minutesUnit = secondsUnit / 60
+          let minutesUnit = secondsUnit / 60;
 
           console.log(wordsUnit / minutesUnit);
           changeWord();
@@ -66,6 +71,8 @@
   <body>
     <p id="word"></p>
     <button onclick="changeWord()">Change word</button>
-    <input oninput="tryWord(this)" type="text" />
+    <input oninput="tryWord(this)" type="text" /> <br>
+    <input type="range" min="3" max="15" value="6" class="slider" id="myRange"> <br>
+    <p id="max"></p>
   </body>
 </html>
