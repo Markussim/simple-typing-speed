@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="icon"
+      type="image/gif"
+      href="data:image/gif;base64,R0lGODlhEAAQAIAAAAAAAAAAACH5BAkAAAEALAAAAAAQABAAAAIgjI+py+0PEQiT1lkNpppnz4HfdoEH2W1nCJRfBMfyfBQAOw=="
+    />
+    <script>
+      let t;
+
+      const promiseA = new Promise(async (resolve, reject) => {
+        let words;
+
+        let wordsPromise = await fetch("/words.txt");
+        if (wordsPromise.ok) {
+          let wordsString = await wordsPromise.text();
+          words = wordsString.split("\n");
+          resolve(words);
+        }
+        reject("Failed");
+      });
+      window.onload = async function () {
+        t = new Date();
+        changeWord();
+      };
+
+      async function changeWord() {
+        let words = await promiseA;
+
+        let wordString = "";
+
+        document.getElementById("max").innerHTML = document.getElementById(
+          "myRange"
+        ).value;
+
+        for (let i = 0; i < 5; i++) {
+          while (true) {
+            let wordTest = words[getRandomInt(words.length - 1)];
+            if (wordTest.length == document.getElementById("myRange").value) {
+              wordString += wordTest + " ";
+              break;
+            }
+          }
+        }
+
+        document.getElementById("hiddenWord").innerHTML = wordString;
+
+        makeGreen();
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
+
+      async function tryWord(doc) {
+        makeGreen();
+        let tmp = new Date();
+        console.log(doc.value.length);
+        if (doc.value.length == 1) {
+          t = new Date();
+          console.log("New date")
+        }
+        if (
+          checkWordAtLength(
+            document.getElementById("hiddenWord").innerHTML.length - 1
+          )
+        ) {
+          //console.log(doc.value.length / (tmp.getTime() - t.getTime()));
+          let wordsUnit = (doc.value.length - 1) / 5;
+
+          let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
+
+          let minutesUnit = secondsUnit / 60;
+
+          console.log(wordsUnit / minutesUnit);
+          document.getElementById("wpm").innerHTML = (
+            wordsUnit / minutesUnit
+          ).toFixed(1);
+          changeWord();
+          doc.value = "";
+          t = new Date();
+        }
+      }
+
+      async function makeGreen() {
+        /*document.getElementById("word").innerHTML = document.getElementById(
+          "hiddenWord"
+        ).innerHTML;*/
+
+        let inputLength = document.getElementById("input").value.length;
+
+        let wordLength = document.getElementById("hiddenWord").innerHTML.length;
+
+        let color;
+
+        if (checkWordAtLength(inputLength)) {
+          color = "green";
+        } else {
+          color = "red";
+        }
+
+        document.getElementById(
+          "word"
+        ).innerHTML = `<a style="color: ${color}">${document
+          .getElementById("hiddenWord")
+          .innerHTML.substring(0, inputLength)}</a><a>${document
+          .getElementById("hiddenWord")
+          .innerHTML.substring(inputLength, wordLength)}</a>`;
+      }
+
+      function checkWordAtLength(len) {
+        return (
+          document.getElementById("input").value ==
+          document.getElementById("hiddenWord").innerHTML.substring(0, len)
+        );
+      }
+    </script>
+
+    <style>
+      * {
+        font-size: 50px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <div id="hiddenWord" hidden></div>
+      <p id="word">Waiting for network...</p>
+      <button onclick="changeWord()">Change word</button>
+      <input id="input" oninput="tryWord(this)" type="text" /> <br />
+      <input
+        type="range"
+        min="3"
+        max="15"
+        value="5"
+        class="slider"
+        id="myRange"
+        oninput="changeWord()"
+      />
+      <br />
+      Length of words:
+      <p id="max"></p>
+      WPM:
+      <p id="wpm"></p>
+    </div>
+  </body>
+</html>
