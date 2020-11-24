@@ -33,10 +33,14 @@
 
         let wordString = "";
 
+        document.getElementById("max").innerHTML = document.getElementById(
+          "myRange"
+        ).value;
+
         for (let i = 0; i < 5; i++) {
           while (true) {
             let wordTest = words[getRandomInt(words.length - 1)];
-            if (wordTest.length < 6) {
+            if (wordTest.length == document.getElementById("myRange").value) {
               wordString += wordTest + " ";
               break;
             }
@@ -61,6 +65,7 @@
           let minutesUnit = secondsUnit / 60;
 
           console.log(wordsUnit / minutesUnit);
+          document.getElementById("wpm").innerHTML = (wordsUnit / minutesUnit).toFixed(1);
           changeWord();
           doc.value = "";
           t = new Date();
@@ -71,8 +76,20 @@
   <body>
     <p id="word"></p>
     <button onclick="changeWord()">Change word</button>
-    <input oninput="tryWord(this)" type="text" /> <br>
-    <input type="range" min="3" max="15" value="6" class="slider" id="myRange"> <br>
+    <input oninput="tryWord(this)" type="text" /> <br />
+    <input
+      type="range"
+      min="3"
+      max="15"
+      value="5"
+      class="slider"
+      id="myRange"
+      onchange="changeWord()"
+    />
+    <br />
+    Length of words:
     <p id="max"></p>
+    WPM:
+    <p id="wpm"></p>
   </body>
 </html>
