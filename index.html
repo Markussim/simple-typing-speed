@@ -12,7 +12,7 @@
       const promiseA = new Promise(async (resolve, reject) => {
         let words;
 
-        let wordsPromise = await fetch("./words.txt");
+        let wordsPromise = await fetch("./words3.txt");
         if (wordsPromise.ok) {
           let wordsString = await wordsPromise.text();
           words = wordsString.split("\n");
@@ -35,13 +35,22 @@
         ).value;
 
         for (let i = 0; i < 5; i++) {
+          let j = words.length;
           while (true) {
             let wordTest = words[getRandomInt(words.length - 1)];
             if (wordTest.length == document.getElementById("myRange").value) {
               wordString += wordTest + " ";
               break;
             }
+            if (j == 0) {
+              wordString = "No words";
+              break;
+            }
+
+            j--;
           }
+
+          if (j == 0) break;
         }
 
         document.getElementById("hiddenWord").innerHTML = wordString;
@@ -76,18 +85,22 @@
           wps.push(wordsUnit / minutesUnit);
 
           console.log(wordsUnit / minutesUnit);
-          if(wps.length > 5) wps.shift();
-          let color = wordsUnit / minutesUnit >= average(wps) ? "green" : "red"
-          document.getElementById("wpm").innerHTML = "<a style=\"color: " + color + ";\">" + (wordsUnit / minutesUnit).toFixed(1) + "</a>" + " (Avarage: " + (
-            average(wps)
-          ).toFixed(1) + ")";
+          if (wps.length > 5) wps.shift();
+          let color = wordsUnit / minutesUnit >= average(wps) ? "green" : "red";
+          document.getElementById("wpm").innerHTML =
+            '<a style="color: ' +
+            color +
+            ';">' +
+            (wordsUnit / minutesUnit).toFixed(1) +
+            "</a>" +
+            " (Avarage: " +
+            average(wps).toFixed(1) +
+            ")";
           changeWord();
           doc.value = "";
           t = new Date();
 
-          
-
-          console.log(wps)
+          console.log(wps);
         }
       }
 
