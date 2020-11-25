@@ -90,7 +90,7 @@
           wpm.push(wordsUnit / minutesUnit);
 
           console.log(wordsUnit / minutesUnit);
-          if (wpm.length > 20) wpm.shift();
+          if (wpm.length > 75) wpm.shift();
           let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
           document.getElementById("wpm").innerHTML =
             '<a style="color: ' +
