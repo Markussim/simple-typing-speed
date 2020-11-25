@@ -184,16 +184,17 @@
     <div id="main">
       <div id="hiddenWord" hidden></div>
       <p id="word">Waiting for network...</p>
-      <button onclick="changeWord()">Change word</button>
+      <button onclick="changeWord()" hidden>Change word</button>
       <input id="input" oninput="tryWord(this)" type="text" /> <br />
       <input
         type="range"
         min="3"
         max="13"
-        value="5"
+        value="3"
         class="slider"
         id="myRange"
         oninput="changeWord()"
+        hidden
       />
       <br />
       Length of words:
