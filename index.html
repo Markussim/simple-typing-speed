@@ -27,6 +27,7 @@
       window.onload = async function () {
         t = new Date();
         changeWord();
+        liveWPM();
       };
 
       async function changeWord() {
@@ -113,14 +114,12 @@
             wrongAttempt = 0;
           }
           if (color == "red") {
-            wrongAttempt++
-            if(wrongAttempt > 1) myRange.value = myRange.value - 1;
+            wrongAttempt++;
+            if (wrongAttempt > 1) myRange.value = myRange.value - 1;
             console.log("Removed");
             let audio = new Audio("./fail.mp3");
             audio.play();
           }
-
-          
 
           changeWord();
           doc.value = "";
@@ -170,6 +169,28 @@
           document.getElementById("input").value.toLowerCase() ==
           document.getElementById("hiddenWord").innerHTML.substring(0, len)
         );
+      }
+
+      function liveWPM() {
+        if (document.getElementById("input").value.length > 0) {
+          let tmp = new Date();
+          let wordsUnit =
+            (document.getElementById("input").value.length - 1) / 5;
+
+          let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
+
+          let minutesUnit = secondsUnit / 60;
+
+          document.getElementById("live").innerHTML =
+            "Live WPM: " + (wordsUnit / minutesUnit).toFixed(1);
+        } else {
+          document.getElementById("live").innerHTML =
+            "Live WPM will be shown here";
+        }
+
+        setTimeout(function () {
+          liveWPM();
+        }, 300);
       }
 
       let average = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -228,6 +249,7 @@
   <body id="body">
     <div id="main">
       <div id="hiddenWord" hidden></div>
+      <p id="live"></p>
       <p id="word">Waiting for network...</p>
       <button onclick="changeWord()" hidden>Change word</button>
       <input id="input" oninput="tryWord(this)" type="text" /> <br />
