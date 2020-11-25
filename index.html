@@ -7,6 +7,8 @@
     <script>
       let t;
 
+      let wrongAttempt = 0;
+
       let wpm = JSON.parse(window.localStorage.getItem("wpm"))
         ? JSON.parse(window.localStorage.getItem("wpm"))
         : [];
@@ -108,13 +110,17 @@
             console.log("Added");
             let audio = new Audio("./success.mp3");
             audio.play();
+            wrongAttempt = 0;
           }
           if (color == "red") {
-            myRange.value = myRange.value - 1;
+            wrongAttempt++
+            if(wrongAttempt > 1) myRange.value = myRange.value - 1;
             console.log("Removed");
             let audio = new Audio("./fail.mp3");
             audio.play();
           }
+
+          
 
           changeWord();
           doc.value = "";
@@ -210,7 +216,7 @@
         div {
           color: white;
         }
-        
+
         button {
           border: solid white 2px;
           background-color: black;
