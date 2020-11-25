@@ -106,6 +106,8 @@
           if (color == "green") {
             myRange.value = myRange.value - -1; // Funkar inte med + 1
             console.log("Added");
+            let audio = new Audio("./success.mp3");
+            audio.play();
           }
           if (color == "red") {
             myRange.value = myRange.value - 1;
