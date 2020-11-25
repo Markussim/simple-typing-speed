@@ -173,6 +173,8 @@
       * {
         font-size: 50px;
         font-family: sans-serif;
+        text-align: center;
+        margin: auto;
       }
 
       #input {
@@ -181,6 +183,34 @@
 
       #myRange {
         width: 75%;
+      }
+
+      @media (prefers-color-scheme: light) {
+        body {
+          background-color: white;
+        }
+        p {
+          color: black;
+        }
+        button {
+          border: solid black 2px;
+          background-color: white;
+          color: black;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: black;
+        }
+        p {
+          color: white;
+        }
+        button {
+          border: solid white 2px;
+          background-color: black;
+          color: white;
+        }
       }
     </style>
   </head>
