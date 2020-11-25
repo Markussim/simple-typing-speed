@@ -28,6 +28,8 @@
         t = new Date();
         changeWord();
         liveWPM();
+
+        myRange.value = window.localStorage.getItem("limit")
       };
 
       async function changeWord() {
@@ -128,6 +130,8 @@
           window.localStorage.setItem("wpm", JSON.stringify(wpm));
 
           console.log(wpm);
+
+          window.localStorage.setItem("limit", myRange.value);
         }
       }
 
