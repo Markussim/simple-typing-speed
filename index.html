@@ -93,9 +93,10 @@
             ';">' +
             (wordsUnit / minutesUnit).toFixed(1) +
             "</a>" +
-            " (Avarage: " +
+            " (Average: " +
             average(wps).toFixed(1) +
             ")";
+
           changeWord();
           doc.value = "";
           t = new Date();
@@ -118,7 +119,14 @@
         if (checkWordAtLength(inputLength)) {
           color = "green";
         } else {
+          let audio = new Audio("./error.mp3");
+          audio.play();
+
           color = "red";
+          document.getElementById("input").style.backgroundColor = "red";
+          setTimeout(function () {
+            document.getElementById("input").style.backgroundColor = "white";
+          }, 300);
         }
 
         document.getElementById(
@@ -153,9 +161,11 @@
       #myRange {
         width: 75%;
       }
+
+
     </style>
   </head>
-  <body>
+  <body id="body">
     <div id="main">
       <div id="hiddenWord" hidden></div>
       <p id="word">Waiting for network...</p>
