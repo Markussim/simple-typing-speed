@@ -7,6 +7,8 @@
     <script>
       let t;
 
+      let wps = [];
+
       const promiseA = new Promise(async (resolve, reject) => {
         let words;
 
@@ -71,13 +73,21 @@
 
           let minutesUnit = secondsUnit / 60;
 
+          wps.push(wordsUnit / minutesUnit);
+
           console.log(wordsUnit / minutesUnit);
-          document.getElementById("wpm").innerHTML = (
-            wordsUnit / minutesUnit
-          ).toFixed(1);
+          if(wps.length > 5) wps.shift();
+          let color = wordsUnit / minutesUnit >= average(wps) ? "green" : "red"
+          document.getElementById("wpm").innerHTML = "<a style=\"color: " + color + ";\">" + (wordsUnit / minutesUnit).toFixed(1) + "</a>" + " (Avarage: " + (
+            average(wps)
+          ).toFixed(1) + ")";
           changeWord();
           doc.value = "";
           t = new Date();
+
+          
+
+          console.log(wps)
         }
       }
 
@@ -113,6 +123,8 @@
           document.getElementById("hiddenWord").innerHTML.substring(0, len)
         );
       }
+
+      let average = (array) => array.reduce((a, b) => a + b) / array.length;
     </script>
 
     <style>
