@@ -57,7 +57,7 @@
         console.log(doc.value.length);
         if (doc.value.length == 1) {
           t = new Date();
-          console.log("New date")
+          console.log("New date");
         }
         if (
           checkWordAtLength(
@@ -109,7 +109,7 @@
 
       function checkWordAtLength(len) {
         return (
-          document.getElementById("input").value ==
+          document.getElementById("input").value.toLowerCase() ==
           document.getElementById("hiddenWord").innerHTML.substring(0, len)
         );
       }
@@ -119,6 +119,14 @@
       * {
         font-size: 50px;
         font-family: sans-serif;
+      }
+
+      #input {
+        width: 75%;
+      }
+
+      #myRange {
+        width: 75%;
       }
     </style>
   </head>
