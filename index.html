@@ -41,7 +41,7 @@
           while (true) {
             let wordTest = words[getRandomInt(words.length - 1)];
             if (wordTest.length == document.getElementById("myRange").value) {
-              wordString += wordTest + " ";
+              wordString += wordTest.toLowerCase() + " ";
               break;
             }
             if (j == 0) {
