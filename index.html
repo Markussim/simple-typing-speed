@@ -7,7 +7,9 @@
     <script>
       let t;
 
-      let wps = [];
+      let wpm = JSON.parse(window.localStorage.getItem("wpm"))
+        ? JSON.parse(window.localStorage.getItem("wpm"))
+        : [];
 
       const promiseA = new Promise(async (resolve, reject) => {
         let words;
@@ -82,11 +84,11 @@
 
           let minutesUnit = secondsUnit / 60;
 
-          wps.push(wordsUnit / minutesUnit);
+          wpm.push(wordsUnit / minutesUnit);
 
           console.log(wordsUnit / minutesUnit);
-          if (wps.length > 5) wps.shift();
-          let color = wordsUnit / minutesUnit >= average(wps) ? "green" : "red";
+          if (wpm.length > 20) wpm.shift();
+          let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
           document.getElementById("wpm").innerHTML =
             '<a style="color: ' +
             color +
@@ -94,14 +96,16 @@
             (wordsUnit / minutesUnit).toFixed(1) +
             "</a>" +
             " (Average: " +
-            average(wps).toFixed(1) +
+            average(wpm).toFixed(1) +
             ")";
 
           changeWord();
           doc.value = "";
           t = new Date();
 
-          console.log(wps);
+          window.localStorage.setItem("wpm", JSON.stringify(wpm));
+
+          console.log(wpm);
         }
       }
 
@@ -161,8 +165,6 @@
       #myRange {
         width: 75%;
       }
-
-
     </style>
   </head>
   <body id="body">
@@ -184,7 +186,7 @@
       Length of words:
       <p id="max"></p>
       WPM:
-      <p id="wpm"></p>
+      <p id="wpm">Type the words to get words per minute</p>
     </div>
   </body>
 </html>
