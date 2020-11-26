@@ -1,10 +1,16 @@
 let t,
     wrongAttempt = 0,
     wordLocation = "./wordLists/",
-    audioLocation = "./sounds/";
+    audioLocation = "./sounds/",
+    wrong = 0,
+    wrongAttemptAccuracy = 0;
 
 let wpm = JSON.parse(window.localStorage.getItem("wpm"))
     ? JSON.parse(window.localStorage.getItem("wpm"))
+    : [];
+
+let accuracy = JSON.parse(window.localStorage.getItem("accuracy"))
+    ? JSON.parse(window.localStorage.getItem("accuracy"))
     : [];
 
 const promiseA = new Promise(async (resolve, reject) => {
@@ -28,7 +34,7 @@ window.onload = async function () {
 
 async function changeWord() {
     let words = await promiseA;
-
+    wrongAttemptAccuracy = 0;
     let wordString = "";
 
     document.getElementById("max").innerHTML = "Word Length:" + document.getElementById(
@@ -70,14 +76,6 @@ async function tryWord(doc) {
         t = new Date();
         //console.log("New date");
     }
-    
-    /*let length = document.getElementById("input").value.length
-    if(document.getElementById("input").value.length.substring(length -1, length) == document.getElementById("hiddenWord").innerHTML.substring(length -1, length)){
-        console.log(true)
-    }else{
-        console.log(false)
-    }*/
-    
 
     if (
         checkWordAtLength(
@@ -92,10 +90,13 @@ async function tryWord(doc) {
         let minutesUnit = secondsUnit / 60;
 
         wpm.push(wordsUnit / minutesUnit);
+        let yourAccuracy = (100 - (wrong / document.getElementById("hiddenWord").innerHTML.length * 100))
 
         //console.log(wordsUnit / minutesUnit);
         if (wpm.length > 75) wpm.shift();
         let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
+        let colorAccuracy = yourAccuracy >= average(accuracy) ? "green" : "red";
+
         document.getElementById("wpm").innerHTML =
             '<a style="color: ' +
             color +
@@ -107,8 +108,21 @@ async function tryWord(doc) {
             ")";
 
         let myRange = document.getElementById("myRange");
+        accuracy.push(yourAccuracy)
 
-        //console.log(color + " " + myRange.value + " " + myRange.max);
+        //console.log(wordsUnit / minutesUnit);
+        if (accuracy.length > 75) accuracy.shift();
+        console.log(yourAccuracy)
+        document.getElementById("accuracy").innerHTML =
+            '<a style="color: ' +
+            colorAccuracy +
+            ';">' +
+            yourAccuracy.toFixed(1) +
+            "%</a>" +
+            " (Average: " +
+            average(accuracy).toFixed(1) +
+            "%)";
+
 
         if (color == "green") {
             myRange.value = myRange.value - -1; // Funkar inte med + 1
@@ -129,8 +143,7 @@ async function tryWord(doc) {
         t = new Date();
 
         window.localStorage.setItem("wpm", JSON.stringify(wpm));
-
-        //console.log(wpm);
+        window.localStorage.setItem("accuracy", JSON.stringify(accuracy));
 
         window.localStorage.setItem("limit", myRange.value);
     }
@@ -152,7 +165,8 @@ async function makeGreen() {
     } else {
         let audio = new Audio(audioLocation + "error.mp3");
         audio.play();
-
+        wrong++;
+        console.log(wrong)
         color = "red";
         document.getElementById("input").style.backgroundColor = "red";
         setTimeout(function () {
@@ -199,14 +213,29 @@ function liveWPM() {
 }
 
 function averageOnLoad() {
-    if (average.length > 0) {
+    if (wpm.length > 0) {
         document.getElementById("wpm").innerHTML =
             "N/A" +
             " (Average: " +
             average(wpm).toFixed(1) +
             ")";
     }
+    if (accuracy.length > 0) {
+        document.getElementById("accuracy").innerHTML =
+            '<a>' +
+            "N/A" +
+            "</a>" +
+            " (Average: " +
+            average(accuracy).toFixed(1) +
+            ")";
+    }
+
+
 }
 
+function average(array) {
+    const total = array.reduce((acc, c) => acc + c, 0);
+    return total / array.length;
+}
 
-let average = (array) => array.reduce((a, b) => a + b) / array.length;
+//let average = (array) => array.reduce((a, b) => a + b) / array.length;
