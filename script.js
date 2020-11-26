@@ -1,12 +1,18 @@
 let t,
-  wrongAttempt = 0,
-  wordLocation = "./wordLists/",
-  audioLocation = "./sounds/",
-  currentlyTyping = false;
+    wrongAttempt = 0,
+    wordLocation = "./wordLists/",
+    audioLocation = "./sounds/",
+    wrong = 0,
+    wrongAttemptAccuracy = 0;
+
 
 let wpm = JSON.parse(window.localStorage.getItem("wpm"))
   ? JSON.parse(window.localStorage.getItem("wpm"))
   : [];
+
+let accuracy = JSON.parse(window.localStorage.getItem("accuracy"))
+    ? JSON.parse(window.localStorage.getItem("accuracy"))
+    : [];
 
 const promiseA = new Promise(async (resolve, reject) => {
   let words;
@@ -28,27 +34,32 @@ window.onload = async function () {
 };
 
 async function changeWord() {
-  let words = await promiseA;
+    let words = await promiseA;
+    wrongAttemptAccuracy = 0;
+    let wordString = "";
 
-  let wordString = "";
+    document.getElementById("max").innerHTML = "Word Length:" + document.getElementById(
+        "myRange"
+    ).value;
 
-  document.getElementById("max").innerHTML =
-    "Word Length:" + document.getElementById("myRange").value;
+    for (let i = 0; i < 5; i++) {
+        let j = words.length;
+        while (true) {
+            let wordTest = words[getRandomInt(words.length - 1)];
+            if (wordTest.length == document.getElementById("myRange").value) {
+                wordString += wordTest.toLowerCase() + " ";
+                break;
+            }
+            if (j == 0) {
+                wordString = "No words";
+                break;
+            }
 
-  for (let i = 0; i < 5; i++) {
-    let j = words.length;
-    while (true) {
-      let wordTest = words[getRandomInt(words.length - 1)];
-      if (wordTest.length == document.getElementById("myRange").value) {
-        wordString += wordTest.toLowerCase() + " ";
-        break;
-      }
-      if (j == 0) {
-        wordString = "No words";
-        break;
-      }
+            j--;
+        }
 
-      j--;
+        if (j == 0) break;
+
     }
 
     if (j == 0) break;
@@ -63,66 +74,84 @@ function getRandomInt(max) {
 }
 
 async function tryWord(doc) {
-  makeGreen();
-  let tmp = new Date();
-  //console.log(doc.value.length);
-  if (doc.value.length == 1 && currentlyTyping == false) {
-    t = new Date();
-    //console.log("New date");
-    currentlyTyping = true;
-  }
-
-  /*let length = document.getElementById("input").value.length
-    if(document.getElementById("input").value.length.substring(length -1, length) == document.getElementById("hiddenWord").innerHTML.substring(length -1, length)){
-        console.log(true)
-    }else{
-        console.log(false)
-    }*/
-
-  if (
-    checkWordAtLength(
-      document.getElementById("hiddenWord").innerHTML.length - 1
-    )
-  ) {
-    //console.log(doc.value.length / (tmp.getTime() - t.getTime()));
-    let wordsUnit = (doc.value.length - 1) / 5;
-
-    let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
-
-    let minutesUnit = secondsUnit / 60;
-
-    wpm.push(wordsUnit / minutesUnit);
-
-    //console.log(wordsUnit / minutesUnit);
-    if (wpm.length > 75) wpm.shift();
-    let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
-    document.getElementById("wpm").innerHTML =
-      '<a style="color: ' +
-      color +
-      ';">' +
-      (wordsUnit / minutesUnit).toFixed(1) +
-      "</a>" +
-      " (Average: " +
-      average(wpm).toFixed(1) +
-      ")";
-
-    let myRange = document.getElementById("myRange");
-
-    //console.log(color + " " + myRange.value + " " + myRange.max);
-
-    if (color == "green") {
-      myRange.value = myRange.value - -1; // Funkar inte med + 1
-      //console.log("Added");
-      let audio = new Audio(audioLocation + "success.mp3");
-      audio.play();
-      wrongAttempt = 0;
+    makeGreen();
+    let tmp = new Date();
+    //console.log(doc.value.length);
+    if (doc.value.length == 1) {
+        t = new Date();
+        //console.log("New date");
     }
-    if (color == "red") {
-      wrongAttempt++;
-      if (wrongAttempt > 1) myRange.value = myRange.value - 1;
-      //console.log("Removed");
-      let audio = new Audio(audioLocation + "fail.mp3");
-      audio.play();
+
+    if (
+        checkWordAtLength(
+            document.getElementById("hiddenWord").innerHTML.length - 1
+        )
+    ) {
+        //console.log(doc.value.length / (tmp.getTime() - t.getTime()));
+        let wordsUnit = (doc.value.length - 1) / 5;
+
+        let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
+
+        let minutesUnit = secondsUnit / 60;
+
+        wpm.push(wordsUnit / minutesUnit);
+        let yourAccuracy = (100 - (wrong / document.getElementById("hiddenWord").innerHTML.length * 100))
+
+        //console.log(wordsUnit / minutesUnit);
+        if (wpm.length > 75) wpm.shift();
+        let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
+        let colorAccuracy = yourAccuracy >= average(accuracy) ? "green" : "red";
+
+        document.getElementById("wpm").innerHTML =
+            '<a style="color: ' +
+            color +
+            ';">' +
+            (wordsUnit / minutesUnit).toFixed(1) +
+            "</a>" +
+            " (Average: " +
+            average(wpm).toFixed(1) +
+            ")";
+
+        let myRange = document.getElementById("myRange");
+        accuracy.push(yourAccuracy)
+
+        //console.log(wordsUnit / minutesUnit);
+        if (accuracy.length > 75) accuracy.shift();
+        console.log(yourAccuracy)
+        document.getElementById("accuracy").innerHTML =
+            '<a style="color: ' +
+            colorAccuracy +
+            ';">' +
+            yourAccuracy.toFixed(1) +
+            "%</a>" +
+            " (Average: " +
+            average(accuracy).toFixed(1) +
+            "%)";
+
+
+        if (color == "green") {
+            myRange.value = myRange.value - -1; // Funkar inte med + 1
+            //console.log("Added");
+            let audio = new Audio(audioLocation + "success.mp3");
+            audio.play();
+            wrongAttempt = 0;
+        }
+        if (color == "red") {
+            wrongAttempt++;
+            if (wrongAttempt > 1) myRange.value = myRange.value - 1;
+            //console.log("Removed");
+            let audio = new Audio(audioLocation + "fail.mp3");
+            audio.play();
+        }
+        changeWord();
+        doc.value = "";
+        t = new Date();
+
+        window.localStorage.setItem("wpm", JSON.stringify(wpm));
+        window.localStorage.setItem("accuracy", JSON.stringify(accuracy));
+
+        window.localStorage.setItem("limit", myRange.value);
+
     }
     changeWord();
     doc.value = "";
@@ -147,13 +176,20 @@ async function makeGreen() {
 
   let wordLength = document.getElementById("hiddenWord").innerHTML.length;
 
-  let color;
+    if (checkWordAtLength(inputLength)) {
+        color = "green"
+    } else {
+        let audio = new Audio(audioLocation + "error.mp3");
+        audio.play();
+        wrong++;
+        console.log(wrong)
+        color = "red";
+        document.getElementById("input").style.backgroundColor = "red";
+        setTimeout(function () {
+            document.getElementById("input").style.backgroundColor = "white";
+        }, 300);
+    }
 
-  if (checkWordAtLength(inputLength)) {
-    color = "green";
-  } else {
-    let audio = new Audio(audioLocation + "error.mp3");
-    audio.play();
 
     color = "red";
     document.getElementById("input").style.backgroundColor = "red";
@@ -201,10 +237,30 @@ function liveWPM() {
 }
 
 function averageOnLoad() {
-  if (average.length > 0) {
-    document.getElementById("wpm").innerHTML =
-      "N/A" + " (Average: " + average(wpm).toFixed(1) + ")";
-  }
+    if (wpm.length > 0) {
+        document.getElementById("wpm").innerHTML =
+            "N/A" +
+            " (Average: " +
+            average(wpm).toFixed(1) +
+            ")";
+    }
+    if (accuracy.length > 0) {
+        document.getElementById("accuracy").innerHTML =
+            '<a>' +
+            "N/A" +
+            "</a>" +
+            " (Average: " +
+            average(accuracy).toFixed(1) +
+            ")";
+    }
+
+
 }
 
-let average = (array) => array.reduce((a, b) => a + b) / array.length;
+function average(array) {
+    const total = array.reduce((acc, c) => acc + c, 0);
+    return total / array.length;
+}
+
+//let average = (array) => array.reduce((a, b) => a + b) / array.length;
+
