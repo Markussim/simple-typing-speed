@@ -22,7 +22,8 @@ window.onload = async function () {
     t = new Date();
     changeWord();
     liveWPM();
-    averageOnLoad()
+    averageOnLoad();
+    adaptiveFavicon();
     myRange.value = window.localStorage.getItem("limit")
 };
 
@@ -31,7 +32,7 @@ async function changeWord() {
 
     let wordString = "";
 
-    document.getElementById("max").innerHTML = "Word Length: " + document.getElementById(
+    document.getElementById("max").innerHTML = "Word Length:" + document.getElementById(
         "myRange"
     ).value;
 
@@ -66,10 +67,10 @@ function getRandomInt(max) {
 async function tryWord(doc) {
     makeGreen();
     let tmp = new Date();
-    console.log(doc.value.length);
+    //console.log(doc.value.length);
     if (doc.value.length == 1) {
         t = new Date();
-        console.log("New date");
+        //console.log("New date");
     }
     if (
         checkWordAtLength(
@@ -85,7 +86,7 @@ async function tryWord(doc) {
 
         wpm.push(wordsUnit / minutesUnit);
 
-        console.log(wordsUnit / minutesUnit);
+        //console.log(wordsUnit / minutesUnit);
         if (wpm.length > 75) wpm.shift();
         let color = wordsUnit / minutesUnit >= average(wpm) ? "green" : "red";
         document.getElementById("wpm").innerHTML =
@@ -100,11 +101,11 @@ async function tryWord(doc) {
 
         let myRange = document.getElementById("myRange");
 
-        console.log(color + " " + myRange.value + " " + myRange.max);
+        //console.log(color + " " + myRange.value + " " + myRange.max);
 
         if (color == "green") {
             myRange.value = myRange.value - -1; // Funkar inte med + 1
-            console.log("Added");
+            //console.log("Added");
             let audio = new Audio(audioLocation + "success.mp3");
             audio.play();
             wrongAttempt = 0;
@@ -112,7 +113,7 @@ async function tryWord(doc) {
         if (color == "red") {
             wrongAttempt++;
             if (wrongAttempt > 1) myRange.value = myRange.value - 1;
-            console.log("Removed");
+            //console.log("Removed");
             let audio = new Audio(audioLocation + "fail.mp3");
             audio.play();
         }
@@ -123,7 +124,7 @@ async function tryWord(doc) {
 
         window.localStorage.setItem("wpm", JSON.stringify(wpm));
 
-        console.log(wpm);
+        //console.log(wpm);
 
         window.localStorage.setItem("limit", myRange.value);
     }
@@ -192,13 +193,24 @@ function liveWPM() {
 }
 
 function averageOnLoad() {
-    if (average.length > 0 ) {
+    if (average.length > 0) {
         document.getElementById("wpm").innerHTML =
             "N/A" +
             " (Average: " +
             average(wpm).toFixed(1) +
             ")";
     }
+}
+
+function adaptiveFavicon() {
+    let parsed = psl.parse(window.location.hostname);
+    let link =
+        document.querySelector("link[rel*='icon']") ||
+        document.createElement("link");
+    link.type = "image/x-icon",
+        link.rel = "shortcut icon",
+        link.href = "http://" + parsed.domain + "/favicon.ico";
+    document.getElementsByTagName("head")[0].appendChild(link);
 }
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
