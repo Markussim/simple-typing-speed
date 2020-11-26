@@ -1,7 +1,7 @@
 let t,
     wrongAttempt = 0,
     wordLocation = "./wordLists/",
-    audioLocation = "./sounds/"
+    audioLocation = "./sounds/";
 
 let wpm = JSON.parse(window.localStorage.getItem("wpm"))
     ? JSON.parse(window.localStorage.getItem("wpm"))
@@ -56,7 +56,6 @@ async function changeWord() {
     }
 
     document.getElementById("hiddenWord").innerHTML = wordString;
-
     makeGreen();
 }
 
@@ -117,7 +116,6 @@ async function tryWord(doc) {
             let audio = new Audio(audioLocation + "fail.mp3");
             audio.play();
         }
-
         changeWord();
         doc.value = "";
         t = new Date();
@@ -142,7 +140,7 @@ async function makeGreen() {
     let color;
 
     if (checkWordAtLength(inputLength)) {
-        color = "green";
+        color = "green"
     } else {
         let audio = new Audio(audioLocation + "error.mp3");
         audio.play();
@@ -212,5 +210,6 @@ function adaptiveFavicon() {
         link.href = "http://" + parsed.domain + "/favicon.ico";
     document.getElementsByTagName("head")[0].appendChild(link);
 }
+
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
