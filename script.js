@@ -1,6 +1,6 @@
 let t,
     wrongAttempt = 0,
-    wordLocation = "./wordlists/",
+    wordLocation = "./wordLists/",
     audioLocation = "./sounds/"
 
 let wpm = JSON.parse(window.localStorage.getItem("wpm"))
@@ -22,7 +22,7 @@ window.onload = async function () {
     t = new Date();
     changeWord();
     liveWPM();
-
+    averageOnLoad()
     myRange.value = window.localStorage.getItem("limit")
 };
 
@@ -189,6 +189,14 @@ function liveWPM() {
     setTimeout(function () {
         liveWPM();
     }, 300);
+}
+
+function averageOnLoad(){
+    document.getElementById("wpm").innerHTML =
+            "N/A" +
+            " (Average: " +
+            average(wpm).toFixed(1) +
+            ")";
 }
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
