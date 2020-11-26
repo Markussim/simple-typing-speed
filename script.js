@@ -31,7 +31,7 @@ async function changeWord() {
 
     let wordString = "";
 
-    document.getElementById("max").innerHTML = document.getElementById(
+    document.getElementById("max").innerHTML = "Word Length: " + document.getElementById(
         "myRange"
     ).value;
 
