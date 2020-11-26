@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Typing</title>
     <script>
-      let t;
-
-      let wrongAttempt = 0;
+      let t,
+      wrongAttempt = 0,
+      wordLocation = "./wordlists/",
+      audioLocation = "./sounds/"
 
       let wpm = JSON.parse(window.localStorage.getItem("wpm"))
         ? JSON.parse(window.localStorage.getItem("wpm"))
@@ -16,7 +17,7 @@
       const promiseA = new Promise(async (resolve, reject) => {
         let words;
 
-        let wordsPromise = await fetch("./words3.txt");
+        let wordsPromise = await fetch(wordLocation + "words3.txt");
         if (wordsPromise.ok) {
           let wordsString = await wordsPromise.text();
           words = wordsString.split("\n");
@@ -111,7 +112,7 @@
           if (color == "green") {
             myRange.value = myRange.value - -1; // Funkar inte med + 1
             console.log("Added");
-            let audio = new Audio("./success.mp3");
+            let audio = new Audio(audioLocation + "success.mp3");
             audio.play();
             wrongAttempt = 0;
           }
@@ -119,7 +120,7 @@
             wrongAttempt++;
             if (wrongAttempt > 1) myRange.value = myRange.value - 1;
             console.log("Removed");
-            let audio = new Audio("./fail.mp3");
+            let audio = new Audio(audioLocation + "fail.mp3");
             audio.play();
           }
 
@@ -149,7 +150,7 @@
         if (checkWordAtLength(inputLength)) {
           color = "green";
         } else {
-          let audio = new Audio("./error.mp3");
+          let audio = new Audio(audioLocation + "error.mp3");
           audio.play();
 
           color = "red";
