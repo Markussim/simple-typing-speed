@@ -179,13 +179,15 @@ function checkWordAtLength(len) {
 }
 
 function liveWPM() {
-  if (document.getElementById("input").value.length > 0) {
+  if (currentlyTyping) {
     let tmp = new Date();
     let wordsUnit = (document.getElementById("input").value.length - 1) / 5;
 
     let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
 
     let minutesUnit = secondsUnit / 60;
+
+    if (wordsUnit < 0) wordsUnit = 0;
 
     document.getElementById("live").innerHTML =
       "Live WPM: " + (wordsUnit / minutesUnit).toFixed(1);
