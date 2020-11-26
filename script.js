@@ -5,31 +5,32 @@ let t,
     wrong = 0,
     wrongAttemptAccuracy = 0;
 
+
 let wpm = JSON.parse(window.localStorage.getItem("wpm"))
-    ? JSON.parse(window.localStorage.getItem("wpm"))
-    : [];
+  ? JSON.parse(window.localStorage.getItem("wpm"))
+  : [];
 
 let accuracy = JSON.parse(window.localStorage.getItem("accuracy"))
     ? JSON.parse(window.localStorage.getItem("accuracy"))
     : [];
 
 const promiseA = new Promise(async (resolve, reject) => {
-    let words;
+  let words;
 
-    let wordsPromise = await fetch(wordLocation + "words3.txt");
-    if (wordsPromise.ok) {
-        let wordsString = await wordsPromise.text();
-        words = wordsString.split("\n");
-        resolve(words);
-    }
-    reject("Failed");
+  let wordsPromise = await fetch(wordLocation + "words3.txt");
+  if (wordsPromise.ok) {
+    let wordsString = await wordsPromise.text();
+    words = wordsString.split("\n");
+    resolve(words);
+  }
+  reject("Failed");
 });
 window.onload = async function () {
-    t = new Date();
-    changeWord();
-    liveWPM();
-    averageOnLoad();
-    myRange.value = window.localStorage.getItem("limit")
+  t = new Date();
+  changeWord();
+  liveWPM();
+  averageOnLoad();
+  myRange.value = window.localStorage.getItem("limit");
 };
 
 async function changeWord() {
@@ -58,14 +59,18 @@ async function changeWord() {
         }
 
         if (j == 0) break;
+
     }
 
-    document.getElementById("hiddenWord").innerHTML = wordString;
-    makeGreen();
+    if (j == 0) break;
+  }
+
+  document.getElementById("hiddenWord").innerHTML = wordString;
+  makeGreen();
 }
 
 function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 async function tryWord(doc) {
@@ -146,19 +151,30 @@ async function tryWord(doc) {
         window.localStorage.setItem("accuracy", JSON.stringify(accuracy));
 
         window.localStorage.setItem("limit", myRange.value);
+
     }
+    changeWord();
+    doc.value = "";
+    t = new Date();
+
+    window.localStorage.setItem("wpm", JSON.stringify(wpm));
+
+    //console.log(wpm);
+
+    window.localStorage.setItem("limit", myRange.value);
+
+    currentlyTyping = false;
+  }
 }
 
 async function makeGreen() {
-    /*document.getElementById("word").innerHTML = document.getElementById(
+  /*document.getElementById("word").innerHTML = document.getElementById(
       "hiddenWord"
     ).innerHTML;*/
 
-    let inputLength = document.getElementById("input").value.length;
+  let inputLength = document.getElementById("input").value.length;
 
-    let wordLength = document.getElementById("hiddenWord").innerHTML.length;
-
-    let color;
+  let wordLength = document.getElementById("hiddenWord").innerHTML.length;
 
     if (checkWordAtLength(inputLength)) {
         color = "green"
@@ -174,42 +190,50 @@ async function makeGreen() {
         }, 300);
     }
 
-    document.getElementById(
-        "word"
-    ).innerHTML = `<a style="color: ${color}">${document
-        .getElementById("hiddenWord")
-        .innerHTML.substring(0, inputLength)}</a><a>${document
-            .getElementById("hiddenWord")
-            .innerHTML.substring(inputLength, wordLength)}</a>`;
+
+    color = "red";
+    document.getElementById("input").style.backgroundColor = "red";
+    setTimeout(function () {
+      document.getElementById("input").style.backgroundColor = "white";
+    }, 300);
+  }
+
+  document.getElementById(
+    "word"
+  ).innerHTML = `<a style="color: ${color}">${document
+    .getElementById("hiddenWord")
+    .innerHTML.substring(0, inputLength)}</a><a>${document
+    .getElementById("hiddenWord")
+    .innerHTML.substring(inputLength, wordLength)}</a>`;
 }
 
 function checkWordAtLength(len) {
-    return (
-        document.getElementById("input").value.toLowerCase() ==
-        document.getElementById("hiddenWord").innerHTML.substring(0, len)
-    );
+  return (
+    document.getElementById("input").value.toLowerCase() ==
+    document.getElementById("hiddenWord").innerHTML.substring(0, len)
+  );
 }
 
 function liveWPM() {
-    if (document.getElementById("input").value.length > 0) {
-        let tmp = new Date();
-        let wordsUnit =
-            (document.getElementById("input").value.length - 1) / 5;
+  if (currentlyTyping) {
+    let tmp = new Date();
+    let wordsUnit = (document.getElementById("input").value.length - 1) / 5;
 
-        let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
+    let secondsUnit = (tmp.getTime() - t.getTime()) / 1000;
 
-        let minutesUnit = secondsUnit / 60;
+    let minutesUnit = secondsUnit / 60;
 
-        document.getElementById("live").innerHTML =
-            "Live WPM: " + (wordsUnit / minutesUnit).toFixed(1);
-    } else {
-        document.getElementById("live").innerHTML =
-            "LiveWPM: N/A";
-    }
+    if (wordsUnit < 0) wordsUnit = 0;
 
-    setTimeout(function () {
-        liveWPM();
-    }, 300);
+    document.getElementById("live").innerHTML =
+      "Live WPM: " + (wordsUnit / minutesUnit).toFixed(1);
+  } else {
+    document.getElementById("live").innerHTML = "LiveWPM: N/A";
+  }
+
+  setTimeout(function () {
+    liveWPM();
+  }, 300);
 }
 
 function averageOnLoad() {
@@ -239,3 +263,4 @@ function average(array) {
 }
 
 //let average = (array) => array.reduce((a, b) => a + b) / array.length;
+
