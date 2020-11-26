@@ -13,6 +13,14 @@
   width: 75%;
 }
 
+#word{
+    margin-top: 2%;
+}
+
+#live{
+    margin: 2%;
+}
+
 #word {
   font-weight: bolder;
 }
