@@ -1,0 +1,63 @@
+* {
+  font-size: 50px;
+  font-family: sans-serif;
+  text-align: center;
+  margin: auto;
+}
+
+#input {
+  width: 75%;
+}
+
+#myRange {
+  width: 75%;
+}
+
+#word{
+    margin-top: 2%;
+}
+
+#live{
+    margin: 2%;
+}
+
+#word {
+  font-weight: bolder;
+}
+
+#word a {
+  font-weight: bolder;
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: white;
+  }
+  p {
+    color: black;
+  }
+  button {
+    border: solid black 2px;
+    background-color: white;
+    color: black;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: black;
+  }
+  p {
+    color: white;
+  }
+
+  div {
+    color: white;
+  }
+
+  button {
+    border: solid white 2px;
+    background-color: black;
+    color: white;
+  }
+}
