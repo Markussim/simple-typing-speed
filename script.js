@@ -183,7 +183,7 @@ function liveWPM() {
             "Live WPM: " + (wordsUnit / minutesUnit).toFixed(1);
     } else {
         document.getElementById("live").innerHTML =
-            "Live WPM will be shown here";
+            "LiveWPM: N/A";
     }
 
     setTimeout(function () {
@@ -191,12 +191,14 @@ function liveWPM() {
     }, 300);
 }
 
-function averageOnLoad(){
-    document.getElementById("wpm").innerHTML =
+function averageOnLoad() {
+    if (average.length > 0 ) {
+        document.getElementById("wpm").innerHTML =
             "N/A" +
             " (Average: " +
             average(wpm).toFixed(1) +
             ")";
+    }
 }
 
 let average = (array) => array.reduce((a, b) => a + b) / array.length;
