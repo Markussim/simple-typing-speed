@@ -71,6 +71,15 @@ async function tryWord(doc) {
         t = new Date();
         //console.log("New date");
     }
+    
+    let length = document.getElementById("input").value.length
+    if(document.getElementById("input").value.length.substring(length -1, length) == document.getElementById("hiddenWord").innerHTML.substring(length -1, length)){
+        console.log(true)
+    }else{
+        console.log(false)
+    }
+    
+
     if (
         checkWordAtLength(
             document.getElementById("hiddenWord").innerHTML.length - 1
