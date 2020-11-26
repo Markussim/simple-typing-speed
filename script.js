@@ -23,7 +23,6 @@ window.onload = async function () {
     changeWord();
     liveWPM();
     averageOnLoad();
-    adaptiveFavicon();
     myRange.value = window.localStorage.getItem("limit")
 };
 
@@ -72,12 +71,12 @@ async function tryWord(doc) {
         //console.log("New date");
     }
     
-    let length = document.getElementById("input").value.length
+    /*let length = document.getElementById("input").value.length
     if(document.getElementById("input").value.length.substring(length -1, length) == document.getElementById("hiddenWord").innerHTML.substring(length -1, length)){
         console.log(true)
     }else{
         console.log(false)
-    }
+    }*/
     
 
     if (
@@ -207,17 +206,6 @@ function averageOnLoad() {
             average(wpm).toFixed(1) +
             ")";
     }
-}
-
-function adaptiveFavicon() {
-    let parsed = psl.parse(window.location.hostname);
-    let link =
-        document.querySelector("link[rel*='icon']") ||
-        document.createElement("link");
-    link.type = "image/x-icon",
-        link.rel = "shortcut icon",
-        link.href = "http://" + parsed.domain + "/favicon.ico";
-    document.getElementsByTagName("head")[0].appendChild(link);
 }
 
 
