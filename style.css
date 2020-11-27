@@ -27,6 +27,7 @@
 
 #word a {
   font-weight: bolder;
+  user-select: none;
 }
 
 input {
