@@ -48,6 +48,11 @@ textarea:focus, input:focus{
   background-color: red;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 0.5; /* Firefox */
+}
+
 @media (prefers-color-scheme: light) {
   body {
     background-color: white;
