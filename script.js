@@ -168,9 +168,9 @@ async function makeGreen() {
         wrong++;
         console.log(wrong)
         color = "red";
-        document.getElementById("input").style.backgroundColor = "red";
+        document.getElementById("input").className = "redText";
         setTimeout(function () {
-            document.getElementById("input").style.backgroundColor = "white";
+            document.getElementById("input").className = "normalText";
         }, 300);
     }
 

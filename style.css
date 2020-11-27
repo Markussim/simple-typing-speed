@@ -29,6 +29,25 @@
   font-weight: bolder;
 }
 
+input {
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+.normalText {
+  background-color: lightgray;
+}
+
+.redText {
+  background-color: red;
+}
+
 @media (prefers-color-scheme: light) {
   body {
     background-color: white;
@@ -59,5 +78,9 @@
     border: solid white 2px;
     background-color: black;
     color: white;
+  }
+
+  .normalText {
+    background-color: gray;
   }
 }
