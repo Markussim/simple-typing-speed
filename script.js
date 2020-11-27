@@ -16,7 +16,7 @@ let accuracy = JSON.parse(window.localStorage.getItem("accuracy"))
 const promiseA = new Promise(async (resolve, reject) => {
     let words;
 
-    let wordsPromise = await fetch(wordLocation + "words3.txt");
+    let wordsPromise = await fetch(wordLocation + "words.txt");
     if (wordsPromise.ok) {
         let wordsString = await wordsPromise.text();
         words = wordsString.split("\n");
