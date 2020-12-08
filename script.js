@@ -34,7 +34,7 @@ window.onload = async function () {
 
 async function changeWord() {
   let words = await promiseA;
-  wrongAttemptAccuracy = 0;
+  wrong = 0;
   let wordString = "";
 
   document.getElementById("max").innerHTML =
