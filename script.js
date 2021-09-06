@@ -163,6 +163,10 @@ async function makeGreen() {
   if (checkWordAtLength(inputLength)) {
     color = "green";
   } else {
+    if (document.getElementById("hardMode").checked) {
+      console.log(document.getElementById("input").value)
+
+    }
     let audio = new Audio(audioLocation + "error.mp3");
     audio.play();
     wrong++;
