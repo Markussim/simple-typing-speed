@@ -9,13 +9,23 @@
   </head>
   <body id="body">
     <div id="main">
-    <noscript>You neen javascript to use this website, please enable javascript or switch to another browser</noscript>
+      <noscript
+        >You neen javascript to use this website, please enable javascript or
+        switch to another browser</noscript
+      >
       <div id="hiddenWord" hidden></div>
       <p id="live"></p>
       <p id="word">Waiting for network...</p>
       <button onclick="changeWord()" hidden>Change word</button>
       <label for="input" hidden>Type the words here</label>
-      <input id="input" oninput="tryWord(this)" type="text" class="normalText" placeholder="Type the words here"/> <br />
+      <input
+        id="input"
+        oninput="tryWord(this)"
+        type="text"
+        class="normalText"
+        placeholder="Type the words here"
+      />
+      <br />
       <input
         type="range"
         min="3"
@@ -27,6 +37,8 @@
         hidden
       />
       <br />
+      <label for="hardMode"></label>
+      <input type="checkbox" id="hardMode" />
       <p id="max"></p>
       <br />
       WPM:
@@ -34,7 +46,6 @@
       <br />
       Accuracy:
       <p id="accuracy">Type the words to get accuracy</p>
-
     </div>
   </body>
 </html>
