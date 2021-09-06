@@ -13,12 +13,12 @@
   width: 75%;
 }
 
-#word{
-    margin-top: 2%;
+#word {
+  margin-top: 2%;
 }
 
-#live{
-    margin: 2%;
+#live {
+  margin: 2%;
 }
 
 #word {
@@ -37,7 +37,8 @@ input {
   border-bottom-style: hidden;
 }
 
-textarea:focus, input:focus{
+textarea:focus,
+input:focus {
   outline: none;
 }
 
@@ -49,7 +50,8 @@ textarea:focus, input:focus{
   background-color: red;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: black;
   opacity: 0.5; /* Firefox */
 }
