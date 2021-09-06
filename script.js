@@ -179,8 +179,8 @@ async function makeGreen() {
   ).innerHTML = `<a style="color: ${color}">${document
     .getElementById("hiddenWord")
     .innerHTML.substring(0, inputLength)}</a><a>${document
-    .getElementById("hiddenWord")
-    .innerHTML.substring(inputLength, wordLength)}</a>`;
+      .getElementById("hiddenWord")
+      .innerHTML.substring(inputLength, wordLength)}</a>`;
 }
 
 function checkWordAtLength(len) {
